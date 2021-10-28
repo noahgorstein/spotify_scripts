@@ -13,6 +13,16 @@ from spotipy.oauth2 import SpotifyOAuth
 # BEN - 37i9dQZF1EpywHzaNngt66
 # NOAH - 37i9dQZF1EpsXgi13RB1Os
 
+# ##############################
+# DISCOVER WEEKLY PLAYLIST IDS
+# ##############################
+# OMRI - 37i9dQZEVXcQstduaQO7HA
+# RYAN - 37i9dQZEVXcDPwgxAaFEWl
+# JACK - 37i9dQZEVXcKuLHb4mDlTg
+# JORDAN - 37i9dQZEVXcR2OKTWtMNZF
+# BEN - 37i9dQZEVXcP1dezheto8s
+# NOAH - 37i9dQZEVXcDNQOBvWPlJH
+
 def concat_playlists(playlists):
     for val in playlists:
         pl = sp.playlist(val)
@@ -37,7 +47,10 @@ def concat_playlists(playlists):
             offset = offset + len(playlist_items['items'])
 
         for key, val in playlistDict.items():
-            trackSet.add(key)
+            if key not in trackSet:
+                trackSet.add(key)
+            else:
+                duplicates.add(sp.track(key)["name"])
 
 
 def split_list(a_list):
@@ -56,10 +69,14 @@ if __name__ == '__main__':
         # to avoid duplicates in playlist
         trackSet = set()
 
+        duplicates = set()
+
         concat_playlists(playlists)
 
         trackList = list(trackSet)
         print(trackList)
+        print("DUPLICATES: ")
+        print(duplicates)
 
         # Noah user id: 1222971566
         playlist = sp.user_playlist_create(user="1222971566", name=playlist_name)
